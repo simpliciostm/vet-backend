@@ -1,0 +1,21 @@
+import express from "express";
+import { UserController } from "../../controller/UserController";
+
+class UserRoutes {
+    public routes: express.Router;
+
+    constructor() {
+        this.routes = express();
+        this.initUserRoutes();
+    }
+
+    private initUserRoutes() {
+        const userController = new UserController()
+        this.routes.get('/userList', userController.getUserList);
+        this.routes.post('/userInsert', userController.insertUser);
+        this.routes.delete('/userDelete/:id', userController.deleteUser);
+        this.routes.put('/userUpdate/:id', userController.updateUser);
+    }
+}
+
+export default new UserRoutes().routes
