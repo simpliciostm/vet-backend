@@ -58,4 +58,18 @@ export class UserController {
             res.status(500).json({ Error: ex });
         }
     }
+
+    public async getUser(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+
+            const userService = new UserService();
+
+            const execute = await userService.getUserService(id)
+
+            res.status(200).json(execute);
+        } catch (ex) {
+            res.status(500).json({ Error: ex });
+        }
+    }
 }

@@ -57,4 +57,18 @@ export class UserService {
             return ({ msg: ex });
         }
     }
+
+    public async getUserService(query: string) {
+        try {
+            let operationPromise: any;
+
+            const userRepository = new UserRepository();
+            operationPromise = await userRepository.getUserRepository(query);
+            if (!operationPromise) return ({ msg: 'Erro getUserService', status: 0 });
+
+            return operationPromise
+        } catch (ex) {
+            return ({ msg: ex });
+        }
+    }
 }

@@ -19,7 +19,6 @@ export class UserRepository {
     public async insertUserRepository(user: IUser) {
         try {
             if (!user) return ({ msg: 'User params undefined or null', status: 0 });
-            console.log('user',user)
 
             let operationPromise: any;
 
@@ -65,22 +64,40 @@ export class UserRepository {
 
             operationPromise = await UserSchema.find({ _id: id });
             if (!operationPromise || operationPromise.length <= 0) return ({ msg: `Não existe usuario com esse id`, status: 0 });
+            const result: IUser = operationPromise ? operationPromise : null;
 
-            const salt = 7;
-            const password = bcrypt.hashSync(user.password, salt);
-            user.password = password;
+            if (result) {
+                if (user.password) {
+                    const salt = 7;
+                    const password = bcrypt.hashSync(user.password, salt);
+                    user.password = password;
+                }
 
-            operationPromise = await UserSchema.findOneAndUpdate({ _id: id }, {
-                email: user.email,
-                name: user.name,
-                password: user.password
-            });
-            if (!operationPromise) return ({ msg: `Erro ao atualizar usuario`, status: 0 });
+                operationPromise = await UserSchema.findOneAndUpdate({ _id: id }, {
+                    email: user.email ? user.email : result.email,
+                    name: user.name ? user.name : result.name,
+                    password: user.password ? user.password : result.password,
+                    permissions: user.permissions ? user.permissions : user.permissions
+                });
+                if (!operationPromise) return ({ msg: `Erro ao atualizar usuario`, status: 0 });
 
-            operationPromise = await UserSchema.findOne({ _id: id });
-            if (!operationPromise) return ({ msg: `Erro ao buscar usuario atualizado`, status: 0 });
-
+                operationPromise = await UserSchema.findOne({ _id: id });
+                if (!operationPromise) return ({ msg: `Erro ao buscar usuario atualizado`, status: 0 });
+            }
             return ({ msg: `Usuario atualizado com sucesso`, status: 1, data: operationPromise });
+        } catch (err) {
+            return ({ msg: err });
+        }
+    }
+
+    public async getUserRepository(idUser: string) {
+        try {
+            let operationPromise: any;
+
+            operationPromise = await UserSchema.findOne({ _id: idUser }).populate('permissions');
+            if (!operationPromise || operationPromise.length <= 0) return ({ msg: 'Não existe Usuário cadastrado', status: 0 });
+
+            return ({ msg: 'Usuario encontrado', status: 1, data: operationPromise });
         } catch (err) {
             return ({ msg: err });
         }

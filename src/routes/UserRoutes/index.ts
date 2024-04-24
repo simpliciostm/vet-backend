@@ -15,6 +15,7 @@ class UserRoutes {
         this.routes.post('/userInsert', userController.insertUser);
         this.routes.delete('/userDelete/:id', userController.deleteUser);
         this.routes.put('/userUpdate/:id', userController.updateUser);
+        this.routes.get('/user/:id', userController.getUser);
     }
 }
 
