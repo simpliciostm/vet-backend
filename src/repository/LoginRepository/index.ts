@@ -10,9 +10,9 @@ export class LoginRepository {
 
             let operationPromise: any;
 
-            operationPromise = await UserSchema.findOne({ email: user.email });
+            operationPromise = await UserSchema.findOne({ email: user.email }).populate('permissions');
             if (!operationPromise || operationPromise.length <= 0) return ({ msg: `Usuario não encontrado com esse email`, status: 0 });
-            const result: IUser = operationPromise ? operationPromise : null;
+            const result = operationPromise ? operationPromise : null;
 
             const isValidPassword = await bcrypt.compareSync(user.password, result.password);
             if (!isValidPassword) return ({ msg: `Password não confere com email de usuario`, status: 0 });
@@ -23,7 +23,7 @@ export class LoginRepository {
                 operationPromise = token;
             }
 
-            return ({ msg: `Usuario logado com sucesso`, status: 1, idUser: result._id, token: operationPromise, auth: true });
+            return ({ msg: `Usuario logado com sucesso`, status: 1, idUser: result._id, token: operationPromise, auth: true, permission: result.permissions.name_permission });
 
         } catch (err) {
             return ({ msg: err });
