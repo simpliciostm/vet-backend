@@ -7,10 +7,12 @@ export class UserRepository {
         try {
             let operationPromise: any;
 
-            operationPromise = await UserSchema.find(query);
+            operationPromise = await UserSchema.find(query).populate('permissions','name_permission');
             if (!operationPromise || operationPromise.length <= 0) return ({ msg: 'Não existe Usuário cadastrado', status: 0 });
 
-            return ({ msg: 'Usuarios cadastrados', status: 1, data: operationPromise });
+            const columns = ['Nome', 'Email', 'Tipo de Usuário', 'Ações'];
+
+            return ({ msg: 'Usuarios cadastrados', status: 1, data: operationPromise, columns: columns });
         } catch (err) {
             return ({ msg: err });
         }
