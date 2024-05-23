@@ -1,18 +1,31 @@
 import UserSchema from "../../schema/UserSchema";
-import { IUser } from "../../interface/User";
+import { IUser, IUserFilter } from "../../interface/User";
 import bcrypt from 'bcrypt';
 
 export class UserRepository {
-    public async getUserListRepository(query: object) {
+    public async getUserListRepository(query: IUserFilter, limit: number, skip: number) {
         try {
             let operationPromise: any;
+            const filter = this.filterFormat(query);
+            let users: any
 
-            operationPromise = await UserSchema.find(query).populate('permissions','name_permission');
-            if (!operationPromise || operationPromise.length <= 0) return ({ msg: 'Não existe Usuário cadastrado', status: 0 });
+            if (filter) {
+                operationPromise = await UserSchema.find(filter).populate('permissions', 'name_permission');
+                if (!operationPromise || operationPromise.length <= 0) return ({ msg: 'Não existe usuário com esse filtro', status: 0 });
+                users = operationPromise ? operationPromise : null;
+            } else {
+                operationPromise = await UserSchema.find({}).populate('permissions', 'name_permission').skip(skip).limit(limit);
+                if (!operationPromise || operationPromise.length <= 0) return ({ msg: 'Não existe Usuário cadastrado', status: 0 });
+                users = operationPromise ? operationPromise : null;
+            }
+
+            operationPromise = await UserSchema.find();
+            if (!operationPromise || operationPromise.length <= 0) return ({ msg: `Não existe Usuário cadastrado`, status: 0 });
+            const totalUsers: number = operationPromise.length;
 
             const columns = ['Nome', 'Email', 'Tipo de Usuário', 'Ações'];
 
-            return ({ msg: 'Usuarios cadastrados', status: 1, data: operationPromise, columns: columns });
+            return ({ msg: 'Usuarios cadastrados', status: 1, data: users, columns: columns, total: totalUsers });
         } catch (err) {
             return ({ msg: err });
         }
@@ -64,21 +77,26 @@ export class UserRepository {
 
             let operationPromise: any;
 
-            operationPromise = await UserSchema.find({ _id: id });
+            operationPromise = await UserSchema.findOne({ _id: id });
             if (!operationPromise || operationPromise.length <= 0) return ({ msg: `Não existe usuario com esse id`, status: 0 });
             const result: IUser = operationPromise ? operationPromise : null;
 
             if (result) {
+                let samePassword = false;
+
                 if (user.password) {
-                    const salt = 7;
-                    const password = bcrypt.hashSync(user.password, salt);
-                    user.password = password;
+                    if (user.password === result.password) samePassword = true;
+                    if (!samePassword) {
+                        const salt = 7;
+                        const password = bcrypt.hashSync(user.password, salt);
+                        user.password = password;
+                    }
                 }
 
                 operationPromise = await UserSchema.findOneAndUpdate({ _id: id }, {
                     email: user.email ? user.email : result.email,
                     name: user.name ? user.name : result.name,
-                    password: user.password ? user.password : result.password,
+                    password: samePassword ? result.password : user.password,
                     permissions: user.permissions ? user.permissions : user.permissions
                 });
                 if (!operationPromise) return ({ msg: `Erro ao atualizar usuario`, status: 0 });
@@ -103,5 +121,22 @@ export class UserRepository {
         } catch (err) {
             return ({ msg: err });
         }
+    }
+
+    private filterFormat(query: IUserFilter) {
+
+        let filter: any;
+
+        if (query.filter.name.length >= 1
+            || query.filter.email.length >= 1) {
+            filter = {
+                $or: [
+                    { name: query.filter.name },
+                    { email: query.filter.email }
+                ]
+            }
+        }
+
+        return filter
     }
 }

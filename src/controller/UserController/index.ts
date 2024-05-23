@@ -4,11 +4,12 @@ import { UserService } from '../../services/UserService';
 export class UserController {
     public async getUserList(req: Request, res: Response) {
         try {
-            const query = req.query;
+            const { limit, skip } = req.params;
+            const filter = req.body;
 
             const userService = new UserService();
 
-            const execute = await userService.getUserListService(query)
+            const execute = await userService.getUserListService(filter, parseInt(limit), parseInt(skip))
 
             res.status(200).json(execute);
         } catch (ex) {
