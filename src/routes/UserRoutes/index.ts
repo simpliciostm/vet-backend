@@ -11,7 +11,7 @@ class UserRoutes {
 
     private initUserRoutes() {
         const userController = new UserController()
-        this.routes.get('/userList', userController.getUserList);
+        this.routes.post('/userList/:skip/:limit', userController.getUserList);
         this.routes.post('/userInsert', userController.insertUser);
         this.routes.delete('/userDelete/:id', userController.deleteUser);
         this.routes.put('/userUpdate/:id', userController.updateUser);

@@ -1,13 +1,13 @@
-import { IUser } from "../../interface/User";
+import { IUser, IUserFilter } from "../../interface/User";
 import { UserRepository } from "../../repository/UserRepository";
 
 export class UserService {
-    public async getUserListService(query: object) {
+    public async getUserListService(filter: IUserFilter, limit: number, skip: number) {
         try {
             let operationPromise: any;
 
             const userRepository = new UserRepository();
-            operationPromise = await userRepository.getUserListRepository(query);
+            operationPromise = await userRepository.getUserListRepository(filter, limit, skip);
             if (!operationPromise) return ({ msg: 'Erro getUserListService', status: 0 });
 
             return operationPromise

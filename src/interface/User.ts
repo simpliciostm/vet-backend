@@ -5,3 +5,10 @@ export interface IUser {
     name: string;
     permissions: string;
 }
+
+export interface IUserFilter {
+    filter: {
+        name: string;
+        email: string
+    }
+}
