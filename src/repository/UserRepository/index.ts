@@ -124,16 +124,23 @@ export class UserRepository {
     }
 
     private filterFormat(query: IUserFilter) {
-
         let filter: any;
-
-        if (query.filter.name.length >= 1
-            || query.filter.email.length >= 1) {
-            filter = {
-                $or: [
-                    { name: query.filter.name },
-                    { email: query.filter.email }
-                ]
+        if (query.filter.name || query.filter.email) {
+            if (query.filter.name.length >= 1
+                && query.filter.email.length >= 1) {
+                filter = {
+                    $and: [
+                        { name: query.filter.name },
+                        { email: query.filter.email }
+                    ]
+                }
+            } else {
+                filter = {
+                    $or: [
+                        { name: query.filter.name },
+                        { email: query.filter.email }
+                    ]
+                }
             }
         }
 
