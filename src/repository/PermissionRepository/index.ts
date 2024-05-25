@@ -22,12 +22,12 @@ export class PermissionRepository {
             let operationPromise: any;
 
             operationPromise = await Permission.find({ name_permission: permission.name_permission });
-            if (!operationPromise || operationPromise.length >= 1) return ({ msg: 'Já existe uma Permission com esse nome e code', status: 0 });
+            if (!operationPromise || operationPromise.length >= 1) return ({ msg: 'Já existe uma Permissão com esse nome', status: 0 });
 
             operationPromise = await Permission.create(permission);
             if (!operationPromise) return ({ msg: `Erro ao criar Permissions`, status: 0 });
 
-            return ({ msg: `Permission criada com sucesso`, status: 1, data: operationPromise });
+            return ({ msg: `Permissão criada com sucesso`, status: 1, data: operationPromise });
         } catch (err) {
             return ({ msg: err });
         }
@@ -45,7 +45,7 @@ export class PermissionRepository {
             operationPromise = await Permission.findOneAndDelete({ _id: id });
             if (!operationPromise) return ({ msg: `Erro ao excluir Permission`, status: 0 });
 
-            return ({ msg: 'Permission deleteada com sucesso', status: 1, data: operationPromise });
+            return ({ msg: 'Permissão deleteada com sucesso', status: 1, data: operationPromise });
         } catch (err) {
             return ({ msg: err });
         }
