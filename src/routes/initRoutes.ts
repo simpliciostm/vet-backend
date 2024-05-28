@@ -3,6 +3,7 @@ import UserRoutes from './UserRoutes';
 import RoleRoutes from './RoleRoutes';
 import PermissionRoutes from './PermissionRoutes';
 import LoginRoutes from './LoginRoutes';
+import CadsRoutes from './RegisterCadsRoutes'
 
 class InitRoutes {
     public express: express.Router;
@@ -10,6 +11,7 @@ class InitRoutes {
     public roleRoutes = RoleRoutes;
     public permissionRoutes = PermissionRoutes;
     public loginRoutes = LoginRoutes;
+    public cadsRoutes = CadsRoutes;
 
     constructor() {
         this.express = express();
@@ -21,6 +23,7 @@ class InitRoutes {
         this.express.use(this.roleRoutes);
         this.express.use(this.permissionRoutes);
         this.express.use(this.loginRoutes);
+        this.express.use(this.cadsRoutes);
     }
 }
 
