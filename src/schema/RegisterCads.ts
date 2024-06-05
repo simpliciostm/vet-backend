@@ -44,6 +44,9 @@ const CadsSchema = new Schema({
     district: {
         type: String
     },
+    nis: {
+        type: String
+    }
 }, {
     timestamps: true
 });

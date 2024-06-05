@@ -7,13 +7,13 @@ export interface ICads {
     size: string; 
     chip: string; 
     intercorrencia: string; 
-    date: string;
     name_tutor: string; 
     cpf: string; 
     phone: string; 
     city: string; 
     address: string; 
     district: string; 
+    nis: string;
 }
 
 export interface ICadsFilter {
