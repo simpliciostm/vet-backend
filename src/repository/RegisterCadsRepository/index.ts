@@ -1,6 +1,5 @@
 import CadsSchema from '../../schema/RegisterCads';
 import { ICads, ICadsFilter } from '../../interface/Cads';
-
 export class RegisterCadsRepository {
     public async getCadsListRepository(query: ICadsFilter, limit: number, skip: number) {
         try {
@@ -29,9 +28,11 @@ export class RegisterCadsRepository {
                 'Cor',
                 'Peso',
                 'Microship',
+                'Nis',
                 'Intercorrência',
-                'Data',
-                'Nome Tutor',
+                'Criado',
+                'Atualizado',
+                'Tutor',
                 'CPF',
                 'Telefone',
                 'Cidade',
@@ -97,13 +98,13 @@ export class RegisterCadsRepository {
                     size: cads.size ? cads.size : '',
                     chip: cads.chip ? cads.chip : '',
                     intercorrencia: cads.intercorrencia ? cads.intercorrencia : '',
-                    date: cads.date ? cads.date : null,
                     name_tutor: cads.name_tutor ? cads.name_tutor : '',
                     cpf: cads.cpf ? cads.cpf : '',
                     phone: cads.phone ? cads.phone : '',
                     city: cads.city ? cads.city : '',
                     address: cads.address ? cads.address : '',
-                    district: cads.district ? cads.district : ''
+                    district: cads.district ? cads.district : '',
+                    nis: cads.nis ? cads.nis : ''
                 });
                 if (!operationPromise) return ({ msg: `Erro ao atualizar registro`, status: 0 });
 
