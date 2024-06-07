@@ -130,6 +130,43 @@ export class RegisterCadsRepository {
         }
     }
 
+    public async getInfosCadsRepository() {
+        try {
+            let operationPromise: any;
+
+            operationPromise = await CadsSchema.find({});
+            if (operationPromise.length <= 0) return ({ msg: `Não existe informações no sistema de registro`, status: 0 });
+            const result = operationPromise.length ? operationPromise : null;
+
+            let totalRegister = operationPromise.length;
+            let registerPortSmall: any[] = [];
+            let registerPortMedium: any[] = [];
+            let registerPortLarge: any[] = [];
+
+
+            if (result.length) {
+                result.forEach((cads: ICads) => {
+                    if (parseInt(cads.size) <= 1 || parseInt(cads.size) >= 14) registerPortSmall.push(cads);
+                    else if (parseInt(cads.size) <= 15 || parseInt(cads.size) >= 17) registerPortMedium.push(cads)
+                    else if (parseInt(cads.size) <= 18 || parseInt(cads.size) >= 25) registerPortLarge.push(cads);
+                })
+            }
+
+
+            return ({
+                msg: `Informações de Registros`,
+                status: 1,
+                totalRegister: totalRegister,
+                portSmall: registerPortSmall.length,
+                portMedium: registerPortMedium.length,
+                portLarge: registerPortLarge.length
+            })
+
+        } catch (err) {
+            return ({ msg: err });
+        }
+    }
+
     private filterFormat(query: ICadsFilter) {
         let filter: any;
         if (query.filter.name_tutor || query.filter.cpf) {

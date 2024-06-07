@@ -71,4 +71,18 @@ export class RegisterCadsService {
             return ({ msg: ex });
         }
     }
+
+    public async getInfoCadsService() {
+        try {
+            let operationPromise: any;
+
+            const cadsRepository = new RegisterCadsRepository();
+            operationPromise = await cadsRepository.getInfosCadsRepository();
+            if (!operationPromise) return ({ msg: 'Erro getInfoCadsService', status: 0 });
+
+            return operationPromise
+        } catch (ex) {
+            return ({ msg: ex });
+        }
+    }
 }
