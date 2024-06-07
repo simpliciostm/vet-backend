@@ -73,4 +73,17 @@ export class RegisterCadsController {
             res.status(500).json({ Error: ex });
         }
     }
+
+    public async getInfosCads(req: Request, res: Response) {
+        try {
+            const cadsService = new RegisterCadsService();
+
+            const execute = await cadsService.getInfoCadsService()
+
+            res.status(200).json(execute);
+        } catch (ex) {
+            res.status(500).json({ Error: ex });
+        }
+    }
+
 }

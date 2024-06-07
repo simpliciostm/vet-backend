@@ -4,6 +4,7 @@ import RoleRoutes from './RoleRoutes';
 import PermissionRoutes from './PermissionRoutes';
 import LoginRoutes from './LoginRoutes';
 import CadsRoutes from './RegisterCadsRoutes'
+import CityRoutes from './CityRoutes'
 
 class InitRoutes {
     public express: express.Router;
@@ -12,6 +13,7 @@ class InitRoutes {
     public permissionRoutes = PermissionRoutes;
     public loginRoutes = LoginRoutes;
     public cadsRoutes = CadsRoutes;
+    public cityRoutes = CityRoutes;
 
     constructor() {
         this.express = express();
@@ -24,6 +26,7 @@ class InitRoutes {
         this.express.use(this.permissionRoutes);
         this.express.use(this.loginRoutes);
         this.express.use(this.cadsRoutes);
+        this.express.use(this.cityRoutes);
     }
 }
 
