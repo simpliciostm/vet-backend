@@ -86,4 +86,28 @@ export class RegisterCadsController {
         }
     }
 
+    public async getInfosCitys(req: Request, res: Response) {
+        try {
+            const cadsService = new RegisterCadsService();
+
+            const execute = await cadsService.getInfoCitysService()
+
+            res.status(200).json(execute);
+        } catch (ex) {
+            res.status(500).json({ Error: ex });
+        }
+    }
+
+    public async getInfosRegisterDate(req: Request, res: Response) {
+        try {
+            const cadsService = new RegisterCadsService();
+
+            const execute = await cadsService.getInfoRegisterDateService()
+
+            res.status(200).json(execute);
+        } catch (ex) {
+            res.status(500).json({ Error: ex });
+        }
+    }
+
 }

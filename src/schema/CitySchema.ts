@@ -1,5 +1,5 @@
 import mongoose, { model, Schema } from 'mongoose';
-import { ICity } from '../interface/City';
+import { ICity } from '../models/interface/City';
 
 const City = new Schema({
     name: {

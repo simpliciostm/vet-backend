@@ -10,10 +10,16 @@ export interface ICads {
     name_tutor: string; 
     cpf: string; 
     phone: string; 
-    city: string; 
+    cep: string;
+    city: {
+        name: string,
+        code: string
+    }; 
     address: string; 
     district: string; 
     nis: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface ICadsFilter {
