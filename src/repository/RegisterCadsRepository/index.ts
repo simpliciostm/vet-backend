@@ -1,5 +1,7 @@
 import CadsSchema from '../../schema/RegisterCads';
-import { ICads, ICadsFilter } from '../../interface/Cads';
+import { ICads, ICadsFilter } from '../../models/interface/Cads';
+import City from '../../schema/CitySchema';
+import moment from 'moment';
 export class RegisterCadsRepository {
     public async getCadsListRepository(query: ICadsFilter, limit: number, skip: number) {
         try {
@@ -8,11 +10,11 @@ export class RegisterCadsRepository {
             let cads: any
 
             if (filter) {
-                operationPromise = await CadsSchema.find(filter);
+                operationPromise = await CadsSchema.find(filter).populate("city");
                 if (!operationPromise || operationPromise.length <= 0) return ({ msg: 'Não existe registros com esse filtro', status: 0 });
                 cads = operationPromise ? operationPromise : null;
             } else {
-                operationPromise = await CadsSchema.find({}).skip(skip).limit(limit);
+                operationPromise = await CadsSchema.find({}).skip(skip).limit(limit).populate("city");
                 if (!operationPromise || operationPromise.length <= 0) return ({ msg: 'Não existe registros cadastrado', status: 0 });
                 cads = operationPromise ? operationPromise : null;
             }
@@ -22,6 +24,7 @@ export class RegisterCadsRepository {
             const totalCads: number = operationPromise.length;
 
             const columns = [
+                'Acões',
                 'Espécie',
                 'Sexo',
                 'Nome',
@@ -33,12 +36,13 @@ export class RegisterCadsRepository {
                 'Criado',
                 'Atualizado',
                 'Tutor',
+                'CEP',
                 'CPF',
                 'Telefone',
                 'Cidade',
                 'Endereço',
                 'Bairro',
-                'Acões',
+
             ]
             return ({ msg: 'Cads cadastrados', status: 1, data: cads, columns: columns, total: totalCads });
         } catch (err) {
@@ -54,6 +58,16 @@ export class RegisterCadsRepository {
 
             operationPromise = await CadsSchema.create(cads);
             if (!operationPromise) return ({ msg: `Erro ao criar Cads`, status: 0 });
+
+            operationPromise = await City.find({ name: cads.city.name });
+            if (operationPromise.length <= 0) {
+                operationPromise = await City.create({
+                    name: cads.city.name,
+                    code: cads.city.code
+                });
+                if (!operationPromise) return ({ msg: `Erro ao criar cidade`, status: 0 });
+            }
+
 
             return ({ msg: `Cads criado com sucesso`, status: 1, data: operationPromise });
         } catch (err) {
@@ -121,7 +135,7 @@ export class RegisterCadsRepository {
         try {
             let operationPromise: any;
 
-            operationPromise = await CadsSchema.findOne({ _id: idCads });
+            operationPromise = await CadsSchema.findOne({ _id: idCads }).populate('city');
             if (!operationPromise || operationPromise.length <= 0) return ({ msg: 'Não existe registro cadastrado', status: 0 });
 
             return ({ msg: 'Registro encontrado', status: 1, data: operationPromise });
@@ -134,9 +148,9 @@ export class RegisterCadsRepository {
         try {
             let operationPromise: any;
 
-            operationPromise = await CadsSchema.find({});
+            operationPromise = await CadsSchema.find({}).populate("city");
             if (operationPromise.length <= 0) return ({ msg: `Não existe informações no sistema de registro`, status: 0 });
-            const result = operationPromise.length ? operationPromise : null;
+            const cads = operationPromise.length ? operationPromise : null;
 
             let totalRegister = operationPromise.length;
             let registerPortSmall: any[] = [];
@@ -144,14 +158,13 @@ export class RegisterCadsRepository {
             let registerPortLarge: any[] = [];
 
 
-            if (result.length) {
-                result.forEach((cads: ICads) => {
-                    if (parseInt(cads.size) <= 1 || parseInt(cads.size) >= 14) registerPortSmall.push(cads);
-                    else if (parseInt(cads.size) <= 15 || parseInt(cads.size) >= 17) registerPortMedium.push(cads)
-                    else if (parseInt(cads.size) <= 18 || parseInt(cads.size) >= 25) registerPortLarge.push(cads);
+            if (cads.length) {
+                cads.forEach((cads: ICads) => {
+                    if (parseInt(cads.size) >= 1 && parseInt(cads.size) <= 5) registerPortSmall.push(cads);
+                    else if (parseInt(cads.size) >= 6 && parseInt(cads.size) <= 15) registerPortMedium.push(cads)
+                    else if (parseInt(cads.size) >= 16) registerPortLarge.push(cads);
                 })
             }
-
 
             return ({
                 msg: `Informações de Registros`,
@@ -159,11 +172,117 @@ export class RegisterCadsRepository {
                 totalRegister: totalRegister,
                 portSmall: registerPortSmall.length,
                 portMedium: registerPortMedium.length,
-                portLarge: registerPortLarge.length
+                portLarge: registerPortLarge.length,
             })
 
         } catch (err) {
-            return ({ msg: err });
+            return err;
+        }
+    }
+
+    public async getInfosCitysRepository() {
+        try {
+            let operationPromise: any;
+            let result: any[] = [];
+
+            operationPromise = await CadsSchema.find({}).populate("city");
+            if (operationPromise.length <= 0) return ({ msg: `Não existe informações no sistema de registro`, status: 0 });
+            const cads = operationPromise.length ? operationPromise : null;
+
+            if (cads && cads.length >= 1) {
+                operationPromise = await City.find();
+                if (operationPromise.length <= 0) return;
+                const citysResult = operationPromise ? operationPromise : null;
+
+                if (citysResult && cads && cads.length >= 1 && citysResult.length >= 1) {
+                    for (let index = 0; index < citysResult.length; index++) {
+                        operationPromise = await CadsSchema.find({ "city.name": citysResult[index].name }, { city: 1 }).populate("city");
+
+                        operationPromise.forEach(registers => {
+                            result.push({
+                                total: operationPromise.length,
+                                city: registers.city.name
+                            });
+                        })
+                    }
+                }
+            }
+
+            const removeDuplicate = result.filter((obj, index, self) =>
+                index === self.findIndex((o) => o.total === obj.total && o.city === obj.city)
+            );
+
+            return ({
+                msg: `Informações de Registros`,
+                status: 1,
+                infoCitys: removeDuplicate
+            });
+
+        } catch (err) {
+            return err;
+        }
+    }
+
+    public async getInfosRegisterDatesRepository() {
+        try {
+            let operationPromise: any;
+            let result: any[] = [];
+
+            const monthsColumns = [
+                { name: 'Janeiro', dateStart: moment().month(0).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(0).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Fevereio', dateStart: moment().month(1).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(1).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Março', dateStart: moment().month(2).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(2).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Abril', dateStart: moment().month(3).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(3).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Maio', dateStart: moment().month(4).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(4).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Junho', dateStart: moment().month(5).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(5).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Julho', dateStart: moment().month(6).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(6).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Agosto', dateStart: moment().month(7).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(7).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Setembro', dateStart: moment().month(8).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(8).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Outubro', dateStart: moment().month(9).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(9).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Novembro', dateStart: moment().month(10).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(10).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+                { name: 'Dezembro', dateStart: moment().month(11).startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ'), dateEnd: moment().month(11).endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSSZ') },
+            ]
+
+            const queries: any[] = [];
+
+            monthsColumns.forEach(month => {
+                const startDate = moment(month.dateStart);
+                const endDate = moment(month.dateEnd);
+
+                const query = {
+                    createdAt: {
+                        $gte: startDate.toDate(),
+                        $lte: endDate.toDate()
+                    }
+                };
+
+                queries.push(query);
+            });
+
+            operationPromise = await CadsSchema.find({ $or: queries });
+            if (operationPromise.length <= 0) return ({ msg: `Registro não cadastrado`, status: 0 });
+
+            if (operationPromise.length >= 1) {
+                operationPromise.forEach(registers => {
+                    result.push({
+                        total: operationPromise.length,
+                        date: moment(registers.createdAt).locale('pt-BR').format('MMMM')
+                    });
+                });
+            }
+
+            const removeDuplicate = result.filter((obj, index, self) =>
+                index === self.findIndex((o) => o.total === obj.total && o.city === obj.city)
+            );
+
+            return ({
+                msg: `Informações de Registros`,
+                status: 1,
+                infoDate: removeDuplicate
+            });
+
+        } catch (err) {
+            return err;
         }
     }
 

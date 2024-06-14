@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { ICads } from '../interface/Cads';
+import mongoose, { Schema, model } from 'mongoose';
+import { ICads } from '../models/interface/Cads';
 
 const CadsSchema = new Schema({
     species: {
@@ -35,8 +35,16 @@ const CadsSchema = new Schema({
     phone: {
         type: String
     },
-    city: {
+    cep: {
         type: String
+    },
+    city: {
+        name: {
+            type: String
+        },
+        code: {
+            type: String
+        }
     },
     address: {
         type: String

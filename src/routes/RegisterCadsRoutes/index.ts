@@ -16,7 +16,9 @@ class CadsRoutes {
         this.routes.delete('/cadsDelete/:id', cadsController.deleteCads);
         this.routes.put('/cadsUpdate/:id', cadsController.updateUser);
         this.routes.get('/cads/:id', cadsController.getUser);
-        this.routes.get('/cadsInfos/', cadsController.getInfosCads);
+        this.routes.post('/cadsInfos/', cadsController.getInfosCads);
+        this.routes.post('/cityInfos/', cadsController.getInfosCitys);
+        this.routes.post('/registerDateInfos/', cadsController.getInfosRegisterDate);
     }
 }
 

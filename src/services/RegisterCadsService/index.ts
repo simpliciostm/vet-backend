@@ -1,4 +1,4 @@
-import { ICads, ICadsFilter } from "../../interface/Cads";
+import { ICads, ICadsFilter } from "../../models/interface/Cads";
 import { RegisterCadsRepository } from "../../repository/RegisterCadsRepository";
 
 export class RegisterCadsService {
@@ -79,6 +79,34 @@ export class RegisterCadsService {
             const cadsRepository = new RegisterCadsRepository();
             operationPromise = await cadsRepository.getInfosCadsRepository();
             if (!operationPromise) return ({ msg: 'Erro getInfoCadsService', status: 0 });
+
+            return operationPromise
+        } catch (err) {
+            return ({ msg: err });
+        }
+    }
+
+    public async getInfoCitysService() {
+        try {
+            let operationPromise: any;
+
+            const cadsRepository = new RegisterCadsRepository();
+            operationPromise = await cadsRepository.getInfosCitysRepository();
+            if (!operationPromise) return ({ msg: 'Erro getInfoCitysService', status: 0});
+
+            return operationPromise
+        } catch (ex) {
+            return ({ msg: ex });
+        }
+    }
+
+    public async getInfoRegisterDateService() {
+        try {
+            let operationPromise: any;
+
+            const cadsRepository = new RegisterCadsRepository();
+            operationPromise = await cadsRepository.getInfosRegisterDatesRepository();
+            if (!operationPromise) return ({ msg: 'Erro getInfoRegisterDateService', status: 0});
 
             return operationPromise
         } catch (ex) {

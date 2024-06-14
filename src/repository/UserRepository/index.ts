@@ -1,5 +1,5 @@
 import UserSchema from "../../schema/UserSchema";
-import { IUser, IUserFilter } from "../../interface/User";
+import { IUser, IUserFilter } from "../../models/interface/User";
 import bcrypt from 'bcrypt';
 
 export class UserRepository {
@@ -23,7 +23,12 @@ export class UserRepository {
             if (!operationPromise || operationPromise.length <= 0) return ({ msg: `Não existe Usuário cadastrado`, status: 0 });
             const totalUsers: number = operationPromise.length;
 
-            const columns = ['Nome', 'Email', 'Tipo de Usuário', 'Ações'];
+            const columns = [
+                'Ações',
+                'Nome',
+                'Email',
+                'Tipo de Usuário'
+            ];
 
             return ({ msg: 'Usuarios cadastrados', status: 1, data: users, columns: columns, total: totalUsers });
         } catch (err) {
@@ -82,11 +87,12 @@ export class UserRepository {
             const result: IUser = operationPromise ? operationPromise : null;
 
             if (result) {
-                let samePassword = false;
+                let changePassword = false;
 
-                if (user.password) {
-                    if (user.password === result.password) samePassword = true;
-                    if (!samePassword) {
+                if (user) {
+                    if (user.password) changePassword = true;
+
+                    if (changePassword) {
                         const salt = 7;
                         const password = bcrypt.hashSync(user.password, salt);
                         user.password = password;
@@ -96,9 +102,10 @@ export class UserRepository {
                 operationPromise = await UserSchema.findOneAndUpdate({ _id: id }, {
                     email: user.email ? user.email : result.email,
                     name: user.name ? user.name : result.name,
-                    password: samePassword ? result.password : user.password,
+                    password: changePassword ? user.password : result.password,
                     permissions: user.permissions ? user.permissions : user.permissions
                 });
+
                 if (!operationPromise) return ({ msg: `Erro ao atualizar usuario`, status: 0 });
 
                 operationPromise = await UserSchema.findOne({ _id: id });
