@@ -24,13 +24,14 @@ export class RegisterCadsRepository {
             const totalCads: number = operationPromise.length;
 
             const columns = [
-                'Acões',
+                'Ações',
                 'Espécie',
                 'Sexo',
                 'Nome',
                 'Cor',
                 'Peso',
-                'Microship',
+                'Idade',
+                'Microchip',
                 'Nis',
                 'Intercorrência',
                 'Criado',
@@ -41,8 +42,8 @@ export class RegisterCadsRepository {
                 'Telefone',
                 'Cidade',
                 'Endereço',
+                'N Resindecial',
                 'Bairro',
-
             ]
             return ({ msg: 'Cads cadastrados', status: 1, data: cads, columns: columns, total: totalCads });
         } catch (err) {
@@ -55,21 +56,36 @@ export class RegisterCadsRepository {
             if (!cads) return ({ msg: 'Cads params undefined or null', status: 0 });
 
             let operationPromise: any;
+            let result: any;
 
-            operationPromise = await CadsSchema.create(cads);
-            if (!operationPromise) return ({ msg: `Erro ao criar Cads`, status: 0 });
+            if (cads.animal.length >= 1) {
+                for (const animals of cads.animal) {
+                    operationPromise = await CadsSchema.create({
+                        animal: animals,
+                        name_tutor: cads.name_tutor,
+                        cpf: cads.cpf,
+                        phone: cads.phone,
+                        city: cads.city,
+                        address: cads.address,
+                        district: cads.district,
+                        cep: cads.cep,
+                        number_residence: cads.number_residence
+                    })
+                    if (!operationPromise) return ({ msg: `Erro ao criar Cads`, status: 0 });
+                    result = operationPromise
+                }
 
-            operationPromise = await City.find({ name: cads.city.name });
-            if (operationPromise.length <= 0) {
-                operationPromise = await City.create({
-                    name: cads.city.name,
-                    code: cads.city.code
-                });
-                if (!operationPromise) return ({ msg: `Erro ao criar cidade`, status: 0 });
+                operationPromise = await City.find({ name: cads.city.name });
+                if (operationPromise.length <= 0) {
+                    operationPromise = await City.create({
+                        name: cads.city.name,
+                        code: cads.city.code
+                    });
+                    if (!operationPromise) return ({ msg: `Erro ao criar cidade`, status: 0 });
+                }
+
             }
-
-
-            return ({ msg: `Cads criado com sucesso`, status: 1, data: operationPromise });
+            return ({ msg: `Cads criado com sucesso`, status: 1, data: result });
         } catch (err) {
             return ({ msg: err });
         }
@@ -105,20 +121,22 @@ export class RegisterCadsRepository {
 
             if (result) {
                 operationPromise = await CadsSchema.findOneAndUpdate({ _id: id }, {
-                    species: cads.species ? cads.species : '',
-                    sexy: cads.sexy ? cads.sexy : '',
-                    name: cads.name ? cads.name : '',
-                    color: cads.color ? cads.color : '',
-                    size: cads.size ? cads.size : '',
-                    chip: cads.chip ? cads.chip : '',
-                    intercorrencia: cads.intercorrencia ? cads.intercorrencia : '',
+                    animal: {
+                        species: cads.animal[0].species ? cads.animal[0].species : '',
+                        sexy: cads.animal[0].sexy ? cads.animal[0].sexy : '',
+                        name: cads.animal[0].name ? cads.animal[0].name : '',
+                        color: cads.animal[0].color ? cads.animal[0].color : '',
+                        size: cads.animal[0].size ? cads.animal[0].size : '',
+                        chip: cads.animal[0].chip ? cads.animal[0].chip : '',
+                        intercorrencia: cads.animal[0].intercorrencia ? cads.animal[0].intercorrencia : '',
+                        nis: cads.animal[0].nis ? cads.animal[0].nis : ''
+                    },
                     name_tutor: cads.name_tutor ? cads.name_tutor : '',
                     cpf: cads.cpf ? cads.cpf : '',
                     phone: cads.phone ? cads.phone : '',
                     city: cads.city ? cads.city : '',
                     address: cads.address ? cads.address : '',
                     district: cads.district ? cads.district : '',
-                    nis: cads.nis ? cads.nis : ''
                 });
                 if (!operationPromise) return ({ msg: `Erro ao atualizar registro`, status: 0 });
 
@@ -152,17 +170,17 @@ export class RegisterCadsRepository {
             if (operationPromise.length <= 0) return ({ msg: `Não existe informações no sistema de registro`, status: 0 });
             const cads = operationPromise.length ? operationPromise : null;
 
-            let totalRegister = operationPromise.length;
+            let totalRegister = cads.length;
             let registerPortSmall: any[] = [];
             let registerPortMedium: any[] = [];
             let registerPortLarge: any[] = [];
 
 
             if (cads.length) {
-                cads.forEach((cads: ICads) => {
-                    if (parseInt(cads.size) >= 1 && parseInt(cads.size) <= 5) registerPortSmall.push(cads);
-                    else if (parseInt(cads.size) >= 6 && parseInt(cads.size) <= 15) registerPortMedium.push(cads)
-                    else if (parseInt(cads.size) >= 16) registerPortLarge.push(cads);
+                cads.forEach((cads: any) => {
+                    if (parseInt(cads.animal.size) >= 1 && parseInt(cads.animal.size) <= 5) registerPortSmall.push(cads);
+                    else if (parseInt(cads.animal.size) >= 6 && parseInt(cads.animal.size) <= 15) registerPortMedium.push(cads)
+                    else if (parseInt(cads.animal.size) >= 16) registerPortLarge.push(cads);
                 })
             }
 

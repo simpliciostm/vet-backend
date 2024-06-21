@@ -91,7 +91,6 @@ export class RegisterCadsController {
             const cadsService = new RegisterCadsService();
 
             const execute = await cadsService.getInfoCitysService()
-
             res.status(200).json(execute);
         } catch (ex) {
             res.status(500).json({ Error: ex });

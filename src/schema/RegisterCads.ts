@@ -2,26 +2,35 @@ import mongoose, { Schema, model } from 'mongoose';
 import { ICads } from '../models/interface/Cads';
 
 const CadsSchema = new Schema({
-    species: {
-        type: String
-    },
-    sexy: {
-        type: String
-    },
-    name: {
-        type: String
-    },
-    color: {
-        type: String
-    },
-    size: {
-        type: String
-    },
-    chip: {
-        type: String
-    },
-    intercorrencia: {
-        type: String
+    animal:
+    {
+        species: {
+            type: String
+        },
+        sexy: {
+            type: String
+        },
+        name: {
+            type: String
+        },
+        color: {
+            type: String
+        },
+        size: {
+            type: String
+        },
+        year: {
+            type: String
+        },
+        chip: {
+            type: String
+        },
+        intercorrencia: {
+            type: String
+        },
+        nis: {
+            type: String
+        }
     },
     date: {
         type: Date
@@ -52,9 +61,9 @@ const CadsSchema = new Schema({
     district: {
         type: String
     },
-    nis: {
-        type: String
-    }
+    number_residence: {
+        type: Number
+    },
 }, {
     timestamps: true
 });
