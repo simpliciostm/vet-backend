@@ -5,10 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/init.ts"
+    "dev": "nodemon src/init.ts",
+    "lint": "eslint 'src/**/*.{js,ts}'",
+    "lint:fix": "eslint 'src/**/*.{js,ts}' --fix",
+    "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Thiago Simplicio da Silva",
+    "email": "contato@thiagosimplicio.com",
+    "url": "https://github.com/simpliciostm"
+  },
   "license": "ISC",
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -31,9 +38,19 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
     "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^28.6.0",
+    "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-react": "^7.34.1",
     "globals": "^15.0.0",
-    "nodemon": "^3.1.0"
+    "lint-staged": "^15.2.7",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.3.2"
+  },
+  "lint-staged": {
+    "**/*.{js,ts}": "eslint 'src/**/*.{js,ts}' --fix"
   }
 }
