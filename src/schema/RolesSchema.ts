@@ -1,15 +1,18 @@
-import { model, Schema } from 'mongoose';
-import { IRole } from '../interface/Roles';
+import { model, Schema } from "mongoose"
+import { IRole } from "../interface/Roles"
 
-const Role = new Schema({
+const Role = new Schema(
+  {
     name_role: {
-        type: String
+      type: String,
     },
     code_role: {
-        type: Number
-    }
-}, {
-    timestamps: true
-});
+      type: Number,
+    },
+  },
+  {
+    timestamps: true,
+  },
+)
 
-export default model<IRole>('Roles', Role);
+export default model<IRole>("Roles", Role)

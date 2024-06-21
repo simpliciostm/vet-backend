@@ -1,12 +1,12 @@
 export interface ICity {
-    _id: string;
-    name: string;
-    code: string;
+  _id: string
+  name: string
+  code: string
 }
 
 export interface ICityFilter {
-    filter: {
-        name: string;
-        code: string
-    }
+  filter: {
+    name: string
+    code: string
+  }
 }

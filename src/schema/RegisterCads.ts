@@ -1,71 +1,73 @@
-import mongoose, { Schema, model } from 'mongoose';
-import { ICads } from '../models/interface/Cads';
+import mongoose, { Schema, model } from "mongoose"
+import { ICads } from "../models/interface/Cads"
 
-const CadsSchema = new Schema({
-    animal:
-    {
-        species: {
-            type: String
-        },
-        sexy: {
-            type: String
-        },
-        name: {
-            type: String
-        },
-        color: {
-            type: String
-        },
-        size: {
-            type: String
-        },
-        year: {
-            type: String
-        },
-        chip: {
-            type: String
-        },
-        intercorrencia: {
-            type: String
-        },
-        nis: {
-            type: String
-        }
+const CadsSchema = new Schema(
+  {
+    animal: {
+      species: {
+        type: String,
+      },
+      sexy: {
+        type: String,
+      },
+      name: {
+        type: String,
+      },
+      color: {
+        type: String,
+      },
+      size: {
+        type: String,
+      },
+      year: {
+        type: String,
+      },
+      chip: {
+        type: String,
+      },
+      intercorrencia: {
+        type: String,
+      },
+      nis: {
+        type: String,
+      },
     },
     date: {
-        type: Date
+      type: Date,
     },
     name_tutor: {
-        type: String
+      type: String,
     },
     cpf: {
-        type: String
+      type: String,
     },
     phone: {
-        type: String
+      type: String,
     },
     cep: {
-        type: String
+      type: String,
     },
     city: {
-        name: {
-            type: String
-        },
-        code: {
-            type: String
-        }
+      name: {
+        type: String,
+      },
+      code: {
+        type: String,
+      },
     },
     address: {
-        type: String
+      type: String,
     },
     district: {
-        type: String
+      type: String,
     },
     number_residence: {
-        type: Number
+      type: Number,
     },
-}, {
-    timestamps: true
-});
+  },
+  {
+    timestamps: true,
+  },
+)
 
-export default model<ICads>('Cads', CadsSchema);
+export default model<ICads>("Cads", CadsSchema)
