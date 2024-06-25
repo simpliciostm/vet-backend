@@ -32,5 +32,7 @@ export interface ICadsFilter {
   filter: {
     name_tutor: string
     cpf: string
+    city: string
+    tutor: string
   }
 }

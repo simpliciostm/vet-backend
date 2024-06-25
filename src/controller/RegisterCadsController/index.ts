@@ -6,6 +6,7 @@ export class RegisterCadsController {
     try {
       const { limit, skip } = req.params
       const filter = req.body
+      const { dateStart, dateEnd } = req.body
 
       const cadsService = new RegisterCadsService()
 
@@ -13,6 +14,8 @@ export class RegisterCadsController {
         filter,
         parseInt(limit),
         parseInt(skip),
+        dateStart,
+        dateEnd
       )
 
       res.status(200).json(execute)
