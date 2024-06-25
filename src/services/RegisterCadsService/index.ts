@@ -6,6 +6,8 @@ export class RegisterCadsService {
     filter: ICadsFilter,
     limit: number,
     skip: number,
+    dateStart?: string,
+    dateEnd?: string
   ) {
     try {
       let operationPromise: any
@@ -15,9 +17,10 @@ export class RegisterCadsService {
         filter,
         limit,
         skip,
+        dateStart, 
+        dateEnd
       )
-      if (!operationPromise)
-        return { msg: "Erro getCadsListService", status: 0 }
+      if (!operationPromise) return { msg: "Erro getCadsListService", status: 0 }
 
       return operationPromise
     } catch (ex) {

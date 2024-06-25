@@ -5,6 +5,7 @@ import PermissionRoutes from "./PermissionRoutes"
 import LoginRoutes from "./LoginRoutes"
 import CadsRoutes from "./RegisterCadsRoutes"
 import CityRoutes from "./CityRoutes"
+import ReportRoutes from "./ReportRoutes"
 
 class InitRoutes {
   public express: express.Router
@@ -14,6 +15,7 @@ class InitRoutes {
   public loginRoutes = LoginRoutes
   public cadsRoutes = CadsRoutes
   public cityRoutes = CityRoutes
+  public reportRoutes = ReportRoutes
 
   constructor() {
     this.express = express()
@@ -27,6 +29,7 @@ class InitRoutes {
     this.express.use(this.loginRoutes)
     this.express.use(this.cadsRoutes)
     this.express.use(this.cityRoutes)
+    this.express.use(this.reportRoutes)
   }
 }
 

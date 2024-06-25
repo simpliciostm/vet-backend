@@ -7,17 +7,28 @@ export class RegisterCadsRepository {
     query: ICadsFilter,
     limit: number,
     skip: number,
+    dateStart?: string,
+    dateEnd?: string
   ) {
     try {
       let operationPromise: any
       const filter = this.filterFormat(query)
       let cads: any
+      let resultFilter: any[] = []
 
-      if (filter) {
+      if (filter || dateStart || dateEnd) {
         operationPromise = await CadsSchema.find(filter).populate("city")
-        if (!operationPromise || operationPromise.length <= 0)
-          return { msg: "Não existe registros com esse filtro", status: 0 }
-        cads = operationPromise ? operationPromise : null
+        if (!operationPromise || operationPromise.length <= 0) return { msg: "Não existe registros com esse filtro", status: 0 }
+        else {
+          if (dateStart && dateEnd) {
+            operationPromise.forEach(results => {
+              if (moment(results.createdAt).format("DD/MM/YYYY") >= moment(dateStart).format("DD/MM/YYYY") &&
+                moment(results.createdAt).format("DD/MM/YYYY") <= moment(dateEnd).format("DD/MM/YYYY")) resultFilter.push(results)
+            })
+          } else for (const resultOperation of operationPromise) resultFilter.push(resultOperation)
+        }
+
+        cads = resultFilter ? resultFilter : null
       } else {
         operationPromise = await CadsSchema.find({})
           .skip(skip)
@@ -165,12 +176,20 @@ export class RegisterCadsRepository {
             district: cads.district ? cads.district : "",
           },
         )
-        if (!operationPromise)
-          return { msg: `Erro ao atualizar registro`, status: 0 }
+        if (!operationPromise) return { msg: `Erro ao atualizar registro`, status: 0 }
+
+        operationPromise = await City.find({ name: cads.city.name })
+        if (operationPromise.length <= 0) {
+          operationPromise = await City.create({
+            name: cads.city.name,
+            code: cads.city.code,
+          })
+          if (!operationPromise)
+            return { msg: `Erro ao criar cidade`, status: 0 }
+        }
 
         operationPromise = await CadsSchema.findOne({ _id: id })
-        if (!operationPromise)
-          return { msg: `Erro ao buscar registro atualizado`, status: 0 }
+        if (!operationPromise) return { msg: `Erro ao buscar registro atualizado`, status: 0 }
       }
       return {
         msg: `Registro atualizado com sucesso`,
@@ -263,12 +282,7 @@ export class RegisterCadsRepository {
         if (operationPromise.length <= 0) return
         const citysResult = operationPromise ? operationPromise : null
 
-        if (
-          citysResult &&
-          cads &&
-          cads.length >= 1 &&
-          citysResult.length >= 1
-        ) {
+        if (citysResult && cads && cads.length >= 1 && citysResult.length >= 1) {
           for (let index = 0; index < citysResult.length; index++) {
             operationPromise = await CadsSchema.find(
               { "city.name": citysResult[index].name },
@@ -488,18 +502,14 @@ export class RegisterCadsRepository {
 
   private filterFormat(query: ICadsFilter) {
     let filter: any
-    if (query.filter.name_tutor || query.filter.cpf) {
-      if (query.filter.name_tutor.length >= 1 && query.filter.cpf.length >= 1) {
-        filter = {
-          $and: [{ cpf: query.filter.cpf }],
-        }
-      } else {
-        filter = {
-          $or: [
-            { name_tutor: query.filter.name_tutor },
-            { cpf: query.filter.cpf },
-          ],
-        }
+    if (query.filter.name_tutor || query.filter.cpf || query.filter.name_tutor || query.filter.city) {
+      filter = {
+        $or: [
+          { name_tutor: query.filter.name_tutor },
+          { cpf: query.filter.cpf },
+          { "city.name": query.filter.city },
+          { name_tutor: query.filter.name_tutor },
+        ],
       }
     }
 
