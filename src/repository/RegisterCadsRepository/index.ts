@@ -17,7 +17,8 @@ export class RegisterCadsRepository {
       let resultFilter: any[] = []
 
       if (filter || dateStart || dateEnd) {
-        operationPromise = await CadsSchema.find(filter).populate("city")
+        operationPromise = await CadsSchema.find(filter).skip(skip)
+          .limit(limit).populate("city")
         if (!operationPromise || operationPromise.length <= 0) return { msg: "Não existe registros com esse filtro", status: 0 }
         else {
           if (dateStart && dateEnd) {
@@ -30,7 +31,7 @@ export class RegisterCadsRepository {
 
         cads = resultFilter ? resultFilter : null
       } else {
-        operationPromise = await CadsSchema.find({})
+        operationPromise = await CadsSchema.find(filter)
           .skip(skip)
           .limit(limit)
           .populate("city")
@@ -504,11 +505,10 @@ export class RegisterCadsRepository {
     let filter: any
     if (query.filter.name_tutor || query.filter.cpf || query.filter.name_tutor || query.filter.city) {
       filter = {
-        $or: [
-          { name_tutor: query.filter.name_tutor },
-          { cpf: query.filter.cpf },
-          { "city.name": query.filter.city },
-          { name_tutor: query.filter.name_tutor },
+        $and: [
+          query.filter.name_tutor ? { name_tutor: query.filter.name_tutor } : {},
+          query.filter.cpf ? { cpf: query.filter.cpf } : {},
+          query.filter.city ? { "city.name": query.filter.city } : {},
         ],
       }
     }

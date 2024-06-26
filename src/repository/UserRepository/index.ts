@@ -14,7 +14,7 @@ export class UserRepository {
       let users: any
 
       if (filter) {
-        operationPromise = await UserSchema.find(filter).populate(
+        operationPromise = await UserSchema.find(filter).limit(limit).skip(skip).populate(
           "permissions",
           "name_permission",
         )
@@ -171,14 +171,11 @@ export class UserRepository {
   private filterFormat(query: IUserFilter) {
     let filter: any
     if (query.filter.name || query.filter.email) {
-      if (query.filter.name.length >= 1 && query.filter.email.length >= 1) {
-        filter = {
-          $and: [{ name: query.filter.name }, { email: query.filter.email }],
-        }
-      } else {
-        filter = {
-          $or: [{ name: query.filter.name }, { email: query.filter.email }],
-        }
+      filter = {
+        $and: [
+          query.filter.name ? { name: query.filter.name } : {},
+          query.filter.email ? { email: query.filter.email } : {}
+        ],
       }
     }
 
