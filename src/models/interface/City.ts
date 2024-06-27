@@ -1,5 +1,6 @@
 export interface ICity {
   _id: string
+  idCity?: number
   name: string
   code: string
 }

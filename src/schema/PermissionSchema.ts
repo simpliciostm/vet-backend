@@ -1,5 +1,6 @@
 import mongoose, { model, Schema } from "mongoose"
-import { IPermission } from "../interface/Permission"
+import { IPermission } from "../models/interface/Permission"
+import mongooseSequence from 'mongoose-sequence'
 
 const Permission = new Schema(
   {
@@ -18,4 +19,5 @@ const Permission = new Schema(
   },
 )
 
+Permission.plugin(mongooseSequence(mongoose), { inc_field: "idPermission" })
 export default model<IPermission>("Permissions", Permission)

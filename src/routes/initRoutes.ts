@@ -3,7 +3,7 @@ import UserRoutes from "./UserRoutes"
 import RoleRoutes from "./RoleRoutes"
 import PermissionRoutes from "./PermissionRoutes"
 import LoginRoutes from "./LoginRoutes"
-import CadsRoutes from "./RegisterCadsRoutes"
+import CadsRoutes from "./CastrationRoutes"
 import CityRoutes from "./CityRoutes"
 import ReportRoutes from "./ReportRoutes"
 

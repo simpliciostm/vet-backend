@@ -1,5 +1,6 @@
 import mongoose, { Schema, model } from "mongoose"
-import { IUser } from "../interface/User"
+import { IUser } from "../models/interface/User"
+import mongooseSequence from 'mongoose-sequence'
 
 const UserSchema = new Schema(
   {
@@ -24,4 +25,5 @@ const UserSchema = new Schema(
   },
 )
 
+UserSchema.plugin(mongooseSequence(mongoose), { inc_field: "idUser" })
 export default model<IUser>("User", UserSchema)

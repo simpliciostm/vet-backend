@@ -1,9 +1,9 @@
-import { ICads, ICadsFilter } from "../../models/interface/Cads"
-import { RegisterCadsRepository } from "../../repository/RegisterCadsRepository"
+import { ICastration, ICastrationFilter } from "../../models/interface/Castration"
+import { RegisterCastrationRepository } from "../../repository/CastrationRepository"
 
-export class RegisterCadsService {
+export class CastrationService {
   public async getCadsListService(
-    filter: ICadsFilter,
+    filter: ICastrationFilter,
     limit: number,
     skip: number,
     dateStart?: string,
@@ -12,8 +12,8 @@ export class RegisterCadsService {
     try {
       let operationPromise: any
 
-      const userRepository = new RegisterCadsRepository()
-      operationPromise = await userRepository.getCadsListRepository(
+      const userRepository = new RegisterCastrationRepository()
+      operationPromise = await userRepository.getCastrationListRepository(
         filter,
         limit,
         skip,
@@ -28,11 +28,11 @@ export class RegisterCadsService {
     }
   }
 
-  public async insertCadsrService(cads: ICads) {
+  public async insertCadsrService(cads: ICastration) {
     try {
       let operationPromise: any
 
-      const cadsRepository = new RegisterCadsRepository()
+      const cadsRepository = new RegisterCastrationRepository()
       operationPromise = await cadsRepository.insertCadsRepository(cads)
       if (!operationPromise)
         return { msg: "Erro insertCadsrService", status: 0 }
@@ -47,7 +47,7 @@ export class RegisterCadsService {
     try {
       let operationPromise: any
 
-      const cadsRepository = new RegisterCadsRepository()
+      const cadsRepository = new RegisterCastrationRepository()
       operationPromise = await cadsRepository.deleteCadsrRepository(id)
       if (!operationPromise) return { msg: "Erro deleteCadsService", status: 0 }
 
@@ -57,11 +57,11 @@ export class RegisterCadsService {
     }
   }
 
-  public async updateCadsService(id: string, cads: ICads) {
+  public async updateCadsService(id: string, cads: ICastration) {
     try {
       let operationPromise: any
 
-      const cadsRepository = new RegisterCadsRepository()
+      const cadsRepository = new RegisterCastrationRepository()
       operationPromise = await cadsRepository.updateCadsRepository(id, cads)
       if (!operationPromise) return { msg: "Erro updateCadsService", status: 0 }
 
@@ -75,7 +75,7 @@ export class RegisterCadsService {
     try {
       let operationPromise: any
 
-      const cadsRepository = new RegisterCadsRepository()
+      const cadsRepository = new RegisterCastrationRepository()
       operationPromise = await cadsRepository.getCadsRepository(query)
       if (!operationPromise) return { msg: "Erro getCadsService", status: 0 }
 
@@ -89,7 +89,7 @@ export class RegisterCadsService {
     try {
       let operationPromise: any
 
-      const cadsRepository = new RegisterCadsRepository()
+      const cadsRepository = new RegisterCastrationRepository()
       operationPromise = await cadsRepository.getInfosCadsRepository()
       if (!operationPromise)
         return { msg: "Erro getInfoCadsService", status: 0 }
@@ -104,7 +104,7 @@ export class RegisterCadsService {
     try {
       let operationPromise: any
 
-      const cadsRepository = new RegisterCadsRepository()
+      const cadsRepository = new RegisterCastrationRepository()
       operationPromise = await cadsRepository.getInfosCitysRepository()
       if (!operationPromise)
         return { msg: "Erro getInfoCitysService", status: 0 }
@@ -119,7 +119,7 @@ export class RegisterCadsService {
     try {
       let operationPromise: any
 
-      const cadsRepository = new RegisterCadsRepository()
+      const cadsRepository = new RegisterCastrationRepository()
       operationPromise = await cadsRepository.getInfosRegisterDatesRepository()
       if (!operationPromise)
         return { msg: "Erro getInfoRegisterDateService", status: 0 }

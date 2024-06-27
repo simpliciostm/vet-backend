@@ -1,7 +1,8 @@
 import mongoose, { Schema, model } from "mongoose"
-import { ICads } from "../models/interface/Cads"
+import { ICastration } from "../models/interface/Castration"
+import mongooseSequence from 'mongoose-sequence'
 
-const CadsSchema = new Schema(
+const CastrationSchema = new Schema(
   {
     animal: {
       species: {
@@ -70,4 +71,5 @@ const CadsSchema = new Schema(
   },
 )
 
-export default model<ICads>("Cads", CadsSchema)
+CastrationSchema.plugin(mongooseSequence(mongoose), { inc_field: "idCastration" })
+export default model<ICastration>("Castration", CastrationSchema)

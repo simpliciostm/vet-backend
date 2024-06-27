@@ -1,5 +1,6 @@
-export interface ICads {
+export interface ICastration {
   _id?: string
+  idC?: number,
   animal: [
     {
       species: string
@@ -28,8 +29,9 @@ export interface ICads {
   updatedAt: string
 }
 
-export interface ICadsFilter {
+export interface ICastrationFilter {
   filter: {
+    idCastration: string
     name_tutor: string
     cpf: string
     city: string

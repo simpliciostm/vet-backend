@@ -1,5 +1,6 @@
-export interface IRegistersReport {
+export interface ICastrationReport {
     _id?: string
+    idCastration?: number
     animal:
     {
         species: string
