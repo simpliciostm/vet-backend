@@ -1,5 +1,5 @@
 import express from "express"
-import { RegisterCadsController } from "../../controller/RegisterCadsController"
+import { CastrationController } from "../../controller/CastrationController"
 
 class CadsRoutes {
   public routes: express.Router
@@ -10,7 +10,7 @@ class CadsRoutes {
   }
 
   private initUserRoutes() {
-    const cadsController = new RegisterCadsController()
+    const cadsController = new CastrationController()
     this.routes.post("/cadsList/:skip/:limit", cadsController.getCadsList)
     this.routes.post("/cadsInsert", cadsController.insertCads)
     this.routes.delete("/cadsDelete/:id", cadsController.deleteCads)

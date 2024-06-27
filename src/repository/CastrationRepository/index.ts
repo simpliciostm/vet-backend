@@ -1,10 +1,11 @@
-import CadsSchema from "../../schema/RegisterCads"
-import { ICads, ICadsFilter } from "../../models/interface/Cads"
+import CastrationSchema from "../../schema/CastrationSchema"
+import { ICastration, ICastrationFilter } from "../../models/interface/Castration"
 import City from "../../schema/CitySchema"
 import moment from "moment"
-export class RegisterCadsRepository {
-  public async getCadsListRepository(
-    query: ICadsFilter,
+
+export class RegisterCastrationRepository {
+  public async getCastrationListRepository(
+    query: ICastrationFilter,
     limit: number,
     skip: number,
     dateStart?: string,
@@ -17,7 +18,7 @@ export class RegisterCadsRepository {
       let resultFilter: any[] = []
 
       if (filter || dateStart || dateEnd) {
-        operationPromise = await CadsSchema.find(filter).skip(skip)
+        operationPromise = await CastrationSchema.find(filter).skip(skip)
           .limit(limit).populate("city")
         if (!operationPromise || operationPromise.length <= 0) return { msg: "Não existe registros com esse filtro", status: 0 }
         else {
@@ -31,7 +32,7 @@ export class RegisterCadsRepository {
 
         cads = resultFilter ? resultFilter : null
       } else {
-        operationPromise = await CadsSchema.find(filter)
+        operationPromise = await CastrationSchema.find(filter)
           .skip(skip)
           .limit(limit)
           .populate("city")
@@ -40,13 +41,14 @@ export class RegisterCadsRepository {
         cads = operationPromise ? operationPromise : null
       }
 
-      operationPromise = await CadsSchema.find()
+      operationPromise = await CastrationSchema.find()
       if (!operationPromise || operationPromise.length <= 0)
         return { msg: `Não existe registros cadastrado`, status: 0 }
       const totalCads: number = operationPromise.length
 
       const columns = [
         "Ações",
+        "Número",
         "Espécie",
         "Sexo",
         "Nome",
@@ -79,7 +81,7 @@ export class RegisterCadsRepository {
     }
   }
 
-  public async insertCadsRepository(cads: ICads) {
+  public async insertCadsRepository(cads: ICastration) {
     try {
       if (!cads) return { msg: "Cads params undefined or null", status: 0 }
 
@@ -88,7 +90,7 @@ export class RegisterCadsRepository {
 
       if (cads.animal.length >= 1) {
         for (const animals of cads.animal) {
-          operationPromise = await CadsSchema.create({
+          operationPromise = await CastrationSchema.create({
             animal: animals,
             name_tutor: cads.name_tutor,
             cpf: cads.cpf,
@@ -125,11 +127,11 @@ export class RegisterCadsRepository {
 
       let operationPromise: any
 
-      operationPromise = await CadsSchema.find({ _id: id })
+      operationPromise = await CastrationSchema.find({ _id: id })
       if (!operationPromise || operationPromise <= 0)
         return { msg: "Não existe cads com esse id", status: 0 }
 
-      operationPromise = await CadsSchema.findOneAndDelete({ _id: id })
+      operationPromise = await CastrationSchema.findOneAndDelete({ _id: id })
       if (!operationPromise) return { msg: `Erro ao excluir Cads`, status: 0 }
 
       return {
@@ -142,19 +144,19 @@ export class RegisterCadsRepository {
     }
   }
 
-  public async updateCadsRepository(id: string, cads: ICads) {
+  public async updateCadsRepository(id: string, cads: ICastration) {
     try {
       if (!id) return { msg: `Id undefined or null`, status: 0 }
 
       let operationPromise: any
 
-      operationPromise = await CadsSchema.findOne({ _id: id })
+      operationPromise = await CastrationSchema.findOne({ _id: id })
       if (!operationPromise || operationPromise.length <= 0)
         return { msg: `Não existe registro com esse id`, status: 0 }
-      const result: ICads = operationPromise ? operationPromise : null
+      const result: ICastration = operationPromise ? operationPromise : null
 
       if (result) {
-        operationPromise = await CadsSchema.findOneAndUpdate(
+        operationPromise = await CastrationSchema.findOneAndUpdate(
           { _id: id },
           {
             animal: {
@@ -189,7 +191,7 @@ export class RegisterCadsRepository {
             return { msg: `Erro ao criar cidade`, status: 0 }
         }
 
-        operationPromise = await CadsSchema.findOne({ _id: id })
+        operationPromise = await CastrationSchema.findOne({ _id: id })
         if (!operationPromise) return { msg: `Erro ao buscar registro atualizado`, status: 0 }
       }
       return {
@@ -206,7 +208,7 @@ export class RegisterCadsRepository {
     try {
       let operationPromise: any
 
-      operationPromise = await CadsSchema.findOne({ _id: idCads }).populate(
+      operationPromise = await CastrationSchema.findOne({ _id: idCads }).populate(
         "city",
       )
       if (!operationPromise || operationPromise.length <= 0)
@@ -222,7 +224,7 @@ export class RegisterCadsRepository {
     try {
       let operationPromise: any
 
-      operationPromise = await CadsSchema.find({}).populate("city")
+      operationPromise = await CastrationSchema.find({}).populate("city")
       if (operationPromise.length <= 0)
         return {
           msg: `Não existe informações no sistema de registro`,
@@ -270,7 +272,7 @@ export class RegisterCadsRepository {
       let operationPromise: any
       let result: any[] = []
 
-      operationPromise = await CadsSchema.find({}).populate("city")
+      operationPromise = await CastrationSchema.find({}).populate("city")
       if (operationPromise.length <= 0)
         return {
           msg: `Não existe informações no sistema de registro`,
@@ -285,7 +287,7 @@ export class RegisterCadsRepository {
 
         if (citysResult && cads && cads.length >= 1 && citysResult.length >= 1) {
           for (let index = 0; index < citysResult.length; index++) {
-            operationPromise = await CadsSchema.find(
+            operationPromise = await CastrationSchema.find(
               { "city.name": citysResult[index].name },
               { city: 1 },
             ).populate("city")
@@ -472,7 +474,7 @@ export class RegisterCadsRepository {
         queries.push(query)
       })
 
-      operationPromise = await CadsSchema.find({ $or: queries })
+      operationPromise = await CastrationSchema.find({ $or: queries })
       if (operationPromise.length <= 0)
         return { msg: `Registro não cadastrado`, status: 0 }
 
@@ -501,11 +503,12 @@ export class RegisterCadsRepository {
     }
   }
 
-  private filterFormat(query: ICadsFilter) {
+  private filterFormat(query: ICastrationFilter) {
     let filter: any
-    if (query.filter.name_tutor || query.filter.cpf || query.filter.name_tutor || query.filter.city) {
+    if (query.filter.idCastration || query.filter.name_tutor || query.filter.cpf || query.filter.name_tutor || query.filter.city) {
       filter = {
         $and: [
+          query.filter.idCastration ? { idCastration: parseInt(query.filter.idCastration) } : {},
           query.filter.name_tutor ? { name_tutor: query.filter.name_tutor } : {},
           query.filter.cpf ? { cpf: query.filter.cpf } : {},
           query.filter.city ? { "city.name": query.filter.city } : {},

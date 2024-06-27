@@ -1,5 +1,6 @@
-import { model, Schema } from "mongoose"
-import { IRole } from "../interface/Roles"
+import mongoose, { model, Schema } from "mongoose"
+import { IRole } from "../models/interface/Roles"
+import mogooseSequence from 'mongoose-sequence'
 
 const Role = new Schema(
   {
@@ -15,4 +16,5 @@ const Role = new Schema(
   },
 )
 
+Role.plugin(mogooseSequence(mongoose), { inc_field: "idRole" })
 export default model<IRole>("Roles", Role)

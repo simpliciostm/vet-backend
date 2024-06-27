@@ -1,14 +1,14 @@
 import { Request, Response } from "express"
-import { RegisterCadsService } from "../../services/RegisterCadsService"
+import { CastrationService } from "../../services/CastrationService"
 
-export class RegisterCadsController {
+export class CastrationController {
   public async getCadsList(req: Request, res: Response) {
     try {
       const { limit, skip } = req.params
       const filter = req.body
       const { dateStart, dateEnd } = req.body
 
-      const cadsService = new RegisterCadsService()
+      const cadsService = new CastrationService()
 
       const execute = await cadsService.getCadsListService(
         filter,
@@ -28,7 +28,7 @@ export class RegisterCadsController {
     try {
       const data = req.body
 
-      const cadsService = new RegisterCadsService()
+      const cadsService = new CastrationService()
 
       const execute = await cadsService.insertCadsrService(data)
 
@@ -42,7 +42,7 @@ export class RegisterCadsController {
     try {
       const { id } = req.params
 
-      const cadsService = new RegisterCadsService()
+      const cadsService = new CastrationService()
 
       const execute = await cadsService.deleteCadsService(id)
 
@@ -57,7 +57,7 @@ export class RegisterCadsController {
       const { id } = req.params
       const data = req.body
 
-      const cadsService = new RegisterCadsService()
+      const cadsService = new CastrationService()
 
       const execute = await cadsService.updateCadsService(id, data)
 
@@ -71,7 +71,7 @@ export class RegisterCadsController {
     try {
       const { id } = req.params
 
-      const cadsService = new RegisterCadsService()
+      const cadsService = new CastrationService()
 
       const execute = await cadsService.getCadsService(id)
 
@@ -83,7 +83,7 @@ export class RegisterCadsController {
 
   public async getInfosCads(req: Request, res: Response) {
     try {
-      const cadsService = new RegisterCadsService()
+      const cadsService = new CastrationService()
 
       const execute = await cadsService.getInfoCadsService()
 
@@ -95,7 +95,7 @@ export class RegisterCadsController {
 
   public async getInfosCitys(req: Request, res: Response) {
     try {
-      const cadsService = new RegisterCadsService()
+      const cadsService = new CastrationService()
 
       const execute = await cadsService.getInfoCitysService()
       res.status(200).json(execute)
@@ -106,7 +106,7 @@ export class RegisterCadsController {
 
   public async getInfosRegisterDate(req: Request, res: Response) {
     try {
-      const cadsService = new RegisterCadsService()
+      const cadsService = new CastrationService()
 
       const execute = await cadsService.getInfoRegisterDateService()
 

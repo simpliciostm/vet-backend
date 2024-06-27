@@ -1,5 +1,6 @@
 export interface IUser {
   _id: string
+  idUser?: number
   email: string
   password: string
   name: string
@@ -8,6 +9,7 @@ export interface IUser {
 
 export interface IUserFilter {
   filter: {
+    idUser: string
     name: string
     email: string
   }

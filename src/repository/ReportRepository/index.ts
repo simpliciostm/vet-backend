@@ -1,15 +1,8 @@
-import { mkConfig, generateCsv, asString } from 'export-to-csv'
-
-// import * as csv from 'csv'
-import { convertArrayToCSV } from 'convert-array-to-csv'
 import * as json2csv from 'json2csv'
-import * as uuid from 'uuid'
-import fs from 'fs'
-import { IRegistersReport } from '../../models/interface/Report'
-
+import { ICastrationReport } from '../../models/interface/Report'
 
 export class ReportRepository {
-    public async exportReportRepositoyCSV(registers: IRegistersReport[], columns: []) {
+    public async exportReportRepositoyCSV(registers: ICastrationReport[], columns: []) {
         try {
 
             const fields = columns
@@ -19,6 +12,7 @@ export class ReportRepository {
 
             for (let index = 0; index < registers.length; index++) {
                 data.push({
+                    "Número": registers[index].idCastration ? registers[index].idCastration : '',
                     "Tutor": registers[index].name_tutor ? registers[index].name_tutor : '',
                     "CEP": registers[index].cep ? registers[index].cep : '',
                     "CPF": registers[index].cpf ? registers[index].cpf : '',

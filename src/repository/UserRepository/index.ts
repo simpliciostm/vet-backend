@@ -36,7 +36,7 @@ export class UserRepository {
         return { msg: `Não existe Usuário cadastrado`, status: 0 }
       const totalUsers: number = operationPromise.length
 
-      const columns = ["Ações", "Nome", "Email", "Tipo de Usuário"]
+      const columns = ["Ações", "Número", "Nome", "Email", "Tipo de Usuário"]
 
       return {
         msg: "Usuarios cadastrados",
@@ -170,9 +170,10 @@ export class UserRepository {
 
   private filterFormat(query: IUserFilter) {
     let filter: any
-    if (query.filter.name || query.filter.email) {
+    if (query.filter.idUser || query.filter.name || query.filter.email) {
       filter = {
         $and: [
+          query.filter.idUser ? { idUser: parseInt(query.filter.idUser) } : {},
           query.filter.name ? { name: query.filter.name } : {},
           query.filter.email ? { email: query.filter.email } : {}
         ],
