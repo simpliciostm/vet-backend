@@ -56,18 +56,20 @@ export class RegisterCastrationRepository {
         "Peso",
         "Idade",
         "Microchip",
+        "CPF",
         "Nis",
         "Intercorrência",
         "Criado",
         "Atualizado",
         "Tutor",
         "CEP",
-        "CPF",
         "Telefone",
         "Cidade",
+        "Bairro",
         "Endereço",
         "N Resindecial",
-        "Bairro",
+        "Bloco",
+        "APTO"
       ]
       return {
         msg: "Cads cadastrados",
@@ -100,6 +102,8 @@ export class RegisterCastrationRepository {
             district: cads.district,
             cep: cads.cep,
             number_residence: cads.number_residence,
+            bloco: cads.bloco,
+            apto: cads.apto
           })
           if (!operationPromise) return { msg: `Erro ao criar Cads`, status: 0 }
           result = operationPromise
@@ -177,6 +181,9 @@ export class RegisterCastrationRepository {
             city: cads.city ? cads.city : "",
             address: cads.address ? cads.address : "",
             district: cads.district ? cads.district : "",
+            number_residence: cads.number_residence ? cads.number_residence : "",
+            bloco: cads.bloco ? cads.bloco : "",
+            apto: cads.apto ? cads.apto : ""
           },
         )
         if (!operationPromise) return { msg: `Erro ao atualizar registro`, status: 0 }
@@ -505,10 +512,9 @@ export class RegisterCastrationRepository {
 
   private filterFormat(query: ICastrationFilter) {
     let filter: any
-    if (query.filter.idCastration || query.filter.name_tutor || query.filter.cpf || query.filter.name_tutor || query.filter.city) {
+    if (query.filter.name_tutor || query.filter.cpf || query.filter.name_tutor || query.filter.city) {
       filter = {
         $and: [
-          query.filter.idCastration ? { idCastration: parseInt(query.filter.idCastration) } : {},
           query.filter.name_tutor ? { name_tutor: query.filter.name_tutor } : {},
           query.filter.cpf ? { cpf: query.filter.cpf } : {},
           query.filter.city ? { "city.name": query.filter.city } : {},
