@@ -27,11 +27,12 @@ export interface ICastration {
   number_residence: number
   createdAt: string
   updatedAt: string
+  bloco: string
+  apto: string
 }
 
 export interface ICastrationFilter {
   filter: {
-    idCastration: string
     name_tutor: string
     cpf: string
     city: string

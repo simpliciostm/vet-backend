@@ -9,7 +9,6 @@ export interface IUser {
 
 export interface IUserFilter {
   filter: {
-    idUser: string
     name: string
     email: string
   }

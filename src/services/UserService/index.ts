@@ -31,7 +31,7 @@ export class UserService {
 
       const userRepository = new UserRepository()
       operationPromise = await userRepository.insertUserRepository(user)
-      if (!operationPromise) return { msg: "Erro insertUserService", status: 0 }
+      if (operationPromise.status === 0) return { msg: "Erro insertUserService", status: 0, err: operationPromise }
 
       return operationPromise
     } catch (ex) {
@@ -45,7 +45,7 @@ export class UserService {
 
       const userRepository = new UserRepository()
       operationPromise = await userRepository.deleteUserRepository(id)
-      if (!operationPromise) return { msg: "Erro deleteUserService", status: 0 }
+      if (operationPromise.status === 0) return { msg: "Erro deleteUserService", status: 0, err: operationPromise }
 
       return operationPromise
     } catch (ex) {

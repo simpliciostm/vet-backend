@@ -65,6 +65,12 @@ const CastrationSchema = new Schema(
     number_residence: {
       type: Number,
     },
+    bloco: {
+      type: String
+    },
+    apto: {
+      type: String
+    }
   },
   {
     timestamps: true,

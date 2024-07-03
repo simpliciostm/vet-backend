@@ -170,10 +170,9 @@ export class UserRepository {
 
   private filterFormat(query: IUserFilter) {
     let filter: any
-    if (query.filter.idUser || query.filter.name || query.filter.email) {
+    if (query.filter.name || query.filter.email) {
       filter = {
         $and: [
-          query.filter.idUser ? { idUser: parseInt(query.filter.idUser) } : {},
           query.filter.name ? { name: query.filter.name } : {},
           query.filter.email ? { email: query.filter.email } : {}
         ],

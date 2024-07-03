@@ -24,9 +24,8 @@ export class LoginRepository {
       if (!isValidPassword)
         return { msg: `Password não confere com email de usuario`, status: 0 }
       else if (isValidPassword) {
-        const payload = result.email
         const mysceret = process.env.MY_SECRET
-        const token = jwt.sign(payload, `${mysceret}`)
+        const token = jwt.sign({email: result.email}, `${mysceret}`, { expiresIn: '24h' })
         operationPromise = token
       }
 
