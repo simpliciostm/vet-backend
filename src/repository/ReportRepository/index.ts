@@ -12,26 +12,28 @@ export class ReportRepository {
 
             for (let index = 0; index < registers.length; index++) {
                 data.push({
-                    "Número": registers[index].idCastration ? registers[index].idCastration : '',
-                    "Tutor": registers[index].name_tutor ? registers[index].name_tutor : '',
-                    "CEP": registers[index].cep ? registers[index].cep : '',
-                    "CPF": registers[index].cpf ? registers[index].cpf : '',
-                    "Telefone": registers[index].phone ? registers[index].phone : '',
-                    "Cidade": registers[index].city.name ? registers[index].city.name : '',
-                    "Endereço": registers[index].address ? registers[index].address : '',
-                    "N Resindecial": registers[index].number_residence ? registers[index].number_residence : '',
-                    "Bairro": registers[index].district ? registers[index].district : '',
-                    "Espécie": registers[index].animal.species ? registers[index].animal.species : '',
-                    "Sexo": registers[index].animal.sexy ? registers[index].animal.sexy : '',
-                    "Nome": registers[index].animal.name ? registers[index].animal.name : '',
-                    "Cor": registers[index].animal.color ? registers[index].animal.color : '',
-                    "Peso": registers[index].animal.size ? registers[index].animal.size : '',
-                    "Idade": registers[index].animal.year ? registers[index].animal.year : '',
-                    "Microchip": registers[index].animal.chip ? registers[index].animal.chip : '',
-                    "Nis": registers[index].animal.nis ? registers[index].animal.nis : '',
-                    "Intercorrência": registers[index].animal.intercorrencia ? registers[index].animal.intercorrencia : '',
-                    "Criado": registers[index].createdAt ? registers[index].createdAt : '',
-                    "Atualizado": registers[index].updatedAt ? registers[index].updatedAt : ''
+                    "Número": registers[index].idCastration ? registers[index].idCastration : '--',
+                    "Tutor": registers[index].name_tutor ? registers[index].name_tutor : '--',
+                    "CEP": registers[index].cep ? registers[index].cep : '--',
+                    "CPF": registers[index].cpf ? registers[index].cpf : '--',
+                    "Telefone": registers[index].phone ? registers[index].phone : '--',
+                    "Cidade": registers[index].city.name ? registers[index].city.name : '--',
+                    "Endereço": registers[index].address ? registers[index].address : '--',
+                    "N Resindecial": registers[index].number_residence ? registers[index].number_residence : '--',
+                    "Bloco": registers[index].bloco ? registers[index].bloco : '--',
+                    "APTO": registers[index].apto ? registers[index].apto : '--',
+                    "Bairro": registers[index].district ? registers[index].district : '--',
+                    "Espécie": registers[index].animal.species ? registers[index].animal.species : '--',
+                    "Sexo": registers[index].animal.sexy ? registers[index].animal.sexy : '--',
+                    "Nome": registers[index].animal.name ? registers[index].animal.name : '--',
+                    "Cor": registers[index].animal.color ? registers[index].animal.color : '--',
+                    "Peso": registers[index].animal.size ? registers[index].animal.size : '--',
+                    "Idade": registers[index].animal.year ? registers[index].animal.year : '--',
+                    "Microchip": registers[index].animal.chip ? registers[index].animal.chip : '--',
+                    "Nis": registers[index].animal.nis ? registers[index].animal.nis : '--',
+                    "Intercorrência": registers[index].animal.intercorrencia ? registers[index].animal.intercorrencia : '--',
+                    "Criado": registers[index].createdAt ? registers[index].createdAt : '--',
+                    "Atualizado": registers[index].updatedAt ? registers[index].updatedAt : '--'
                 })
             }
 

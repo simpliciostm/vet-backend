@@ -24,6 +24,8 @@ export interface ICastrationReport {
     address: string
     district: string
     number_residence: number
+    bloco: string
+    apto: number
     createdAt: string
     updatedAt: string
 }[]
